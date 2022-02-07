@@ -5,6 +5,20 @@ namespace Methods
 {
     internal class Program
     {
+        static int DiceRoll(int numberOfRolls, int diceSides, int fixedBonus = 0)
+        {
+            
+            var random = new Random();
+            int result = 0;
+            for (int i = 0; i < numberOfRolls; i++)
+            {
+                int roll = random.Next(1, diceSides+1);
+                result += roll;
+            }
+            result += fixedBonus;
+            return result;
+
+        }
         static void SimulateBattle(List<string> heroes, string monster, int monsterHP, int savingThrowDC)
         {
             var random = new Random();
@@ -21,12 +35,8 @@ namespace Methods
             {
                 foreach (var name in heroes)
                 {
-                    int damage = 0;
-                    for (int i = 0; i < 2; i++)
-                    {
-                        int damageRoll = random.Next(1, 7);
-                        damage += damageRoll;
-                    }
+                    int damage = DiceRoll(2, 6);
+
                     monsterHP -= damage;
                     
                     if (monsterHP <= 0)
@@ -53,7 +63,7 @@ namespace Methods
                 Console.WriteLine($"The {monster} made a killing blow aginst {targetName}!");
                 Console.WriteLine();
 
-                int savingThrow = random.Next(1, 21);
+                int savingThrow = DiceRoll(1, 20);
 
                 if (constitution + savingThrow < savingThrowDC)
                 {
@@ -89,18 +99,19 @@ namespace Methods
             names.Add("Melissa");
 
             Console.WriteLine($"A party of warriors {String.Join(", ", names)} descends into the dungeon.");
-
-            SimulateBattle(names, "orc", 15, 12);
+            
+            //random HP orc (2d8+6) mage (9d8) and troll (8d10+40)
+            SimulateBattle(names, "orc", DiceRoll(2, 8, 6), 12);
             
             if (names.Count > 0)
             {
-                SimulateBattle(names, "mage", 40, 20);
+                SimulateBattle(names, "mage", DiceRoll(9, 8), 20);
 
             }
             
             if (names.Count > 0)
             {
-                SimulateBattle(names, "troll", 84, 18);
+                SimulateBattle(names, "troll", DiceRoll(8, 10, 40), 18);
             }
 
             if (names.Count > 0)
