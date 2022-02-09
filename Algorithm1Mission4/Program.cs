@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Algorithm1Mission4
 {
@@ -7,27 +8,39 @@ namespace Algorithm1Mission4
     {
         static void Main(string[] args)
         {
+            var random = new Random();
             var streams = new List<int>();
-            var symbols = "!@#$%^&*()_+-=[];',.\/~{}:|<>?";
+            var symbols = @"!@#$%^&*()_+-=[];'`,.\/~{}:|<>?";
 
-            for (i = 0; i < 10; i++) streams.Add(random.Next(0, 80));
+            for (int i = 0; i < 10; i++)
+            {
+                streams.Add(random.Next(0, 80));
+            }
 
-            Console.ForegroundColor = ConsoleColor.DarkGren;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
 
             while (true)
             {
                 for (int x = 0; x < 80; x++)
                 {
-                    Console.Write(streams.Contains(x) ? symbols[random.Next(symbols.Length)] : ' ';
+                    Console.Write(streams.Contains(x) ? symbols[random.Next(symbols.Length)] : ' ');
                 }
 
                 Console.WriteLine();
-                Thread.Sleep(100)
+                Thread.Sleep(100);
 
 
-                if (random.Next(3) = 0) streams.RemoveAt(random.Next(streams.Count));
-                if (random.Next(3) = 0) streams.Add(random.Next(0, 80));
+                if (random.Next(3) == 0)
+                {
+                    streams.RemoveAt(random.Next(streams.Count));
+                }
+
+                if (random.Next(3) == 0)
+                {
+                    streams.Add(random.Next(0, 80));
+                }
 
             }
         }
     }
+}
