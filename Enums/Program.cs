@@ -38,6 +38,8 @@ namespace Enums
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
+            //DrawAce(Suits.Heart); (Drawing one specific ace)
+
             for (int i = 0; i < 4; i++)
             {
                 DrawAce((Suits)i);
