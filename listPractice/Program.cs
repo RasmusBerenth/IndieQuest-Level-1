@@ -50,15 +50,84 @@ namespace listPractice
                 {
                     productOfFirstTen *= listOfNumbers[i];
                 }
-                Console.WriteLine(productOfFirstTen);
+                Console.WriteLine($"The product off the first ten numbers is: {productOfFirstTen}");
+            Console.WriteLine();
 
             //6. Sort the numbers and output the sorted list.
+            
+            listOfNumbers.Sort();
+            Console.WriteLine($"The sorted numbers are: {String.Join(", ", listOfNumbers)}");
+            Console.WriteLine();
+
             //7. Create a new list with just the even numbers from the sorted list.
+            var listOfEvenNumbers = new List<int>();
+            foreach (int number in listOfNumbers)
+            {
+                if (number % 2 == 0)
+                {
+                    listOfEvenNumbers.Add(number);
+                }
+            }
+            Console.WriteLine($"Even numbers are: {String.Join(", ", listOfEvenNumbers)}");
+            Console.WriteLine();
+
             //8. Create a new list with just the 10 largest numbers from the sorted list.
+            var listOfTenBiggest = new List<int>();
+            for (int i = n - 10;i < n;i++)
+            {
+                listOfTenBiggest.Add(listOfNumbers[i]);
+            }
+            Console.WriteLine($"Ten largest numbers are: {String.Join(", ", listOfTenBiggest)}");
+            Console.WriteLine();
+
             //9. Create a new list with the 10 largest unique numbers from the sorted list (numbers can't repeat themselves).
+            var listOfBiggestUnique = new List<int>();
+            for (int index = n - 1; listOfBiggestUnique.Count < 10;index--)
+            {
+                int currentNumber = listOfNumbers[index];
+                if (!listOfBiggestUnique.Contains(currentNumber))
+                {
+                    listOfBiggestUnique.Add(currentNumber);
+                }
+            }
+            Console.WriteLine($"Ten largest unique numbers are: {String.Join(", ", listOfBiggestUnique)}");
+            Console.WriteLine();
+
             //10. Write how many unique numbers are in the whole original list.
+            var listOfUniqueNumbers = new List<int>();
+            for (int index = 0; index < n; index++)
+            {
+                int currentNumber = listOfNumbers[index];
+                if (!listOfUniqueNumbers.Contains(currentNumber))
+                {
+                    listOfUniqueNumbers.Add(currentNumber);
+                }
+            }
+            
+            Console.WriteLine($"There are {listOfUniqueNumbers.Count} unique numbers in the original list");
+            Console.WriteLine();
+
             //11. Write which numbers from 0–99 are missing in the list.
+            var listOfMissingNumbers = new List<int>();
+            for (int index = 0;index < 99;index++)
+            {
+                
+                listOfMissingNumbers.Add();
+            }
+
+            for (int index = 0; index < 99; index++)
+            {
+                int currentNumber = listOfMissingNumbers[index];
+                if (!listOfNumbers.Contains(currentNumber))
+                {
+                    listOfMissingNumbers.Add(currentNumber);
+                }
+            }
+            Console.WriteLine($"The numbers {String.Join(", ", listOfMissingNumbers)} are missing from the original list");
+            Console.WriteLine();
+
             //12. Draw a histogram of the numbers with 10 bins (each bin counts how many numbers fall into that bin).
+
 
 
         }
