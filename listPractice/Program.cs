@@ -11,7 +11,7 @@ namespace listPractice
             //Part 1
             //1. Ask the user to enter a number. Store it into a variable called n. Examples below will be given for value n = 50.
             Console.WriteLine("Pleas enter a number here:");
-            int n = 50;// Convert.ToInt32(Console.ReadLine());
+            int n = 50; //Convert.ToInt32(Console.ReadLine());
 
             //2. Create a list with n random integers in the range 0–99. Output the list.
             var random = new Random();
@@ -109,19 +109,21 @@ namespace listPractice
 
             //11. Write which numbers from 0–99 are missing in the list.
             var listOfMissingNumbers = new List<int>();
-            for (int index = 0;index < 99;index++)
+
+            for (int listOfNumbers = 0; listOfNumbers < n; listOfNumbers++)
             {
                 
-                listOfMissingNumbers.Add();
-            }
 
-            for (int index = 0; index < 99; index++)
-            {
-                int currentNumber = listOfMissingNumbers[index];
-                if (!listOfNumbers.Contains(currentNumber))
+
+                for (int index = 0; index < 99; index++)
                 {
-                    listOfMissingNumbers.Add(currentNumber);
+                    int currentNumber = listOfNumbers[index];
+                    if (!listOfNumbers.Contains(currentNumber))
+                    {
+                        listOfMissingNumbers.Add(currentNumber);
+                    }
                 }
+
             }
             Console.WriteLine($"The numbers {String.Join(", ", listOfMissingNumbers)} are missing from the original list");
             Console.WriteLine();
