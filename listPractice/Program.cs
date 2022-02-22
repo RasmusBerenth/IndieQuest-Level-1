@@ -28,7 +28,7 @@ namespace listPractice
             Console.WriteLine();
 
             //3. Calculate the sum of all the numbers.
-            int sumOfNumbers = 0; 
+            int sumOfNumbers = 0;
             foreach (int number in listOfNumbers)
             {
                 sumOfNumbers += number;
@@ -47,14 +47,14 @@ namespace listPractice
             //5. Calculate the product of the first 10 numbers.
             long productOfFirstTen = 1;
             for (int i = 0; i < 10; i++)
-                {
-                    productOfFirstTen *= listOfNumbers[i];
-                }
-                Console.WriteLine($"The product off the first ten numbers is: {productOfFirstTen}");
+            {
+                productOfFirstTen *= listOfNumbers[i];
+            }
+            Console.WriteLine($"The product off the first ten numbers is: {productOfFirstTen}");
             Console.WriteLine();
 
             //6. Sort the numbers and output the sorted list.
-            
+
             listOfNumbers.Sort();
             Console.WriteLine($"The sorted numbers are: {String.Join(", ", listOfNumbers)}");
             Console.WriteLine();
@@ -73,7 +73,7 @@ namespace listPractice
 
             //8. Create a new list with just the 10 largest numbers from the sorted list.
             var listOfTenBiggest = new List<int>();
-            for (int i = n - 10;i < n;i++)
+            for (int i = n - 10; i < n; i++)
             {
                 listOfTenBiggest.Add(listOfNumbers[i]);
             }
@@ -82,7 +82,7 @@ namespace listPractice
 
             //9. Create a new list with the 10 largest unique numbers from the sorted list (numbers can't repeat themselves).
             var listOfBiggestUnique = new List<int>();
-            for (int index = n - 1; listOfBiggestUnique.Count < 10;index--)
+            for (int index = n - 1; listOfBiggestUnique.Count < 10; index--)
             {
                 int currentNumber = listOfNumbers[index];
                 if (!listOfBiggestUnique.Contains(currentNumber))
@@ -103,28 +103,26 @@ namespace listPractice
                     listOfUniqueNumbers.Add(currentNumber);
                 }
             }
-            
+
             Console.WriteLine($"There are {listOfUniqueNumbers.Count} unique numbers in the original list");
             Console.WriteLine();
 
             //11. Write which numbers from 0–99 are missing in the list.
             var listOfMissingNumbers = new List<int>();
+            var listOfAllNumbers = new List<int>();
 
-            for (int listOfNumbers = 0; listOfNumbers < n; listOfNumbers++)
+            for (int counter = 0; counter < 99; counter++)
             {
-                
-
-
-                for (int index = 0; index < 99; index++)
+                counter++;
+                int currentNumber.Add(counter);
+                currentNumber = listOfNumbers[listOfAllNumbers];
+                if (!listOfNumbers.Contains(currentNumber))
                 {
-                    int currentNumber = listOfNumbers[index];
-                    if (!listOfNumbers.Contains(currentNumber))
-                    {
-                        listOfMissingNumbers.Add(currentNumber);
-                    }
+                    listOfMissingNumbers.Add(currentNumber);
                 }
-
             }
+
+
             Console.WriteLine($"The numbers {String.Join(", ", listOfMissingNumbers)} are missing from the original list");
             Console.WriteLine();
 
