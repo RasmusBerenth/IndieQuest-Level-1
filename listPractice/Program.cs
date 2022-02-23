@@ -110,21 +110,19 @@ namespace listPractice
             //11. Write which numbers from 0–99 are missing in the list.
             var listOfMissingNumbers = new List<int>();
 
-            for (int counter = -1; counter < 99; counter++)
+            for (int counter = 0; counter < 99; counter++)
             {
-                counter++;
                 if (!listOfNumbers.Contains(counter))
                 {
                     listOfMissingNumbers.Add(counter);
                 }
             }
 
-
             Console.WriteLine($"The numbers {String.Join(", ", listOfMissingNumbers)} are missing from the original list");
             Console.WriteLine();
 
             //12. Draw a histogram of the numbers with 10 bins (each bin counts how many numbers fall into that bin).
-
+            
 
 
         }
