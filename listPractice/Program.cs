@@ -109,16 +109,13 @@ namespace listPractice
 
             //11. Write which numbers from 0–99 are missing in the list.
             var listOfMissingNumbers = new List<int>();
-            var listOfAllNumbers = new List<int>();
 
-            for (int counter = 0; counter < 99; counter++)
+            for (int counter = -1; counter < 99; counter++)
             {
                 counter++;
-                int currentNumber.Add(counter);
-                currentNumber = listOfNumbers[listOfAllNumbers];
-                if (!listOfNumbers.Contains(currentNumber))
+                if (!listOfNumbers.Contains(counter))
                 {
-                    listOfMissingNumbers.Add(currentNumber);
+                    listOfMissingNumbers.Add(counter);
                 }
             }
 
