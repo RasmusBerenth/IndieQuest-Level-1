@@ -6,12 +6,12 @@ namespace listPractice
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void PartOne(int n)
         {
             //Part 1
             //1. Ask the user to enter a number. Store it into a variable called n. Examples below will be given for value n = 50.
             Console.WriteLine("Pleas enter a number here:");
-            int n = 50; //Convert.ToInt32(Console.ReadLine());
+            n = Convert.ToInt32(Console.ReadLine());
 
             //2. Create a list with n random integers in the range 0–99. Output the list.
             var random = new Random();
@@ -122,8 +122,125 @@ namespace listPractice
             Console.WriteLine();
 
             //12. Draw a histogram of the numbers with 10 bins (each bin counts how many numbers fall into that bin).
-            
+            Console.WriteLine("Histogram:");
+            for (int minNumber = 0; minNumber <= 90; minNumber += 10)
+            {
+                int maxNumber = minNumber + 9;
+                if (minNumber == 0)
+                {
+                    Console.Write($"  ");
+                }
 
+                Console.Write($"{minNumber}-{maxNumber}: ");
+
+                foreach (int number in listOfNumbers)
+                {
+                    if (number <= maxNumber && number >= minNumber)
+                    {
+                        Console.Write("#");
+                    }
+                }
+                Console.WriteLine();
+
+            }
+        }
+        static void Main(string[] args)
+        {
+            //Part 2
+            //1.
+            var names = new List<string> {"Allie", "Ben", "Clair", "Dan", "Eleanor"};
+            Console.WriteLine(String.Join(",", names));
+
+            //2.
+            names[0] = "Duke";
+            Console.WriteLine(String.Join(",", names));
+
+            //3.
+            names[3] = "Lara";
+            Console.WriteLine(String.Join(",", names));
+
+            //4.
+            names[4] = "Aaron";
+            Console.WriteLine(String.Join(",", names));
+
+            //5.
+            names.Sort();
+            Console.WriteLine(String.Join(",", names));
+
+            //6.
+            names.Reverse();
+            Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
+
+            //7.
+            bool listContentBool = names.Contains("Duke");
+            Console.WriteLine($"The list contains the name Duke: {listContentBool}");
+            Console.WriteLine();
+
+            //8.
+            int nameIndex = names.IndexOf("Aaron");
+            Console.WriteLine($"The index of Aaron is: {nameIndex}");
+            Console.WriteLine();
+
+            //9.
+            names.Insert(0, "Mario");
+            Console.WriteLine(String.Join(",", names));
+
+            //10.
+            names.Insert(3, "Luigi");
+            Console.WriteLine(String.Join(",", names));
+
+            //11.
+            //for (int i = 0; i < names.Count; i+=2)
+            //{
+            //    names.Insert(i, names[i]);
+            //}
+            //Console.WriteLine(String.Join(",", names));
+
+            //12.
+            for (int i = 1; i < names.Count - 1; i += 2)
+            {
+                names.Insert(i, names[i]);
+            }
+            names.Insert(12, "Mario");
+            names.Insert(0, "Aaron");
+            
+            Console.WriteLine(String.Join(",", names));
+
+            //13.
+            names.RemoveAt(4);
+            Console.WriteLine(String.Join(",", names));
+
+            //14.
+            int marioIndex = names.IndexOf("Mario");
+            names.RemoveAt((int)marioIndex);
+            
+            //names.RemoveAt(1);
+            Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
+
+            //15.
+            int lastOfClair = names.LastIndexOf("Clair");
+            Console.WriteLine($"The index of the last occurance of Clair is: {lastOfClair}");
+            Console.WriteLine();
+
+            //16.
+            int lastOfAaron = names.LastIndexOf("Aaron");
+            names.RemoveAt((int)lastOfAaron);
+            Console.WriteLine(String.Join(",", names));
+
+            //17.
+            for (int i = 0; i < names.Count;i++)
+            {
+                if ()
+                {
+                    
+                }
+
+            }
+
+            //18.
+            
 
         }
     }
