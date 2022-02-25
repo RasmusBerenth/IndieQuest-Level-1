@@ -6,12 +6,13 @@ namespace listPractice
 {
     internal class Program
     {
-        static void PartOne(int n)
+        static void PartOne()
         {
             //Part 1
+            Console.WriteLine("Part 1:");
             //1. Ask the user to enter a number. Store it into a variable called n. Examples below will be given for value n = 50.
             Console.WriteLine("Pleas enter a number here:");
-            n = Convert.ToInt32(Console.ReadLine());
+            int n = Convert.ToInt32(Console.ReadLine());
 
             //2. Create a list with n random integers in the range 0–99. Output the list.
             var random = new Random();
@@ -141,11 +142,12 @@ namespace listPractice
                     }
                 }
                 Console.WriteLine();
-
             }
         }
-        static void Main(string[] args)
+        static void PartTwo()
         {
+            Console.WriteLine();
+            Console.WriteLine("Part 2:");
             //Part 2
             //1.
             var names = new List<string> { "Allie", "Ben", "Clair", "Dan", "Eleanor" };
@@ -200,7 +202,7 @@ namespace listPractice
             //11.
             //for (int i = 0; i < names.Count; i+=2)
             //{
-            //    names.Insert(i, names[i]);
+              //  names.Insert(i, names[i]);
             //}
             //Console.WriteLine(String.Join(",", names));
             //Console.WriteLine();
@@ -257,7 +259,11 @@ namespace listPractice
             //18.
             names.Clear();
             Console.WriteLine($"List: {String.Join(",", names)}");
-
+        }
+        static void Main(string[] args)
+        {
+            PartOne();
+            PartTwo();
         }
     }
 }
