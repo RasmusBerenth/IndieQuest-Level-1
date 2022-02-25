@@ -148,24 +148,29 @@ namespace listPractice
         {
             //Part 2
             //1.
-            var names = new List<string> {"Allie", "Ben", "Clair", "Dan", "Eleanor"};
+            var names = new List<string> { "Allie", "Ben", "Clair", "Dan", "Eleanor" };
             Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
 
             //2.
             names[0] = "Duke";
             Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
 
             //3.
             names[3] = "Lara";
             Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
 
             //4.
             names[4] = "Aaron";
             Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
 
             //5.
             names.Sort();
             Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
 
             //6.
             names.Reverse();
@@ -185,10 +190,12 @@ namespace listPractice
             //9.
             names.Insert(0, "Mario");
             Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
 
             //10.
             names.Insert(3, "Luigi");
             Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
 
             //11.
             //for (int i = 0; i < names.Count; i+=2)
@@ -196,6 +203,7 @@ namespace listPractice
             //    names.Insert(i, names[i]);
             //}
             //Console.WriteLine(String.Join(",", names));
+            //Console.WriteLine();
 
             //12.
             for (int i = 1; i < names.Count - 1; i += 2)
@@ -204,18 +212,18 @@ namespace listPractice
             }
             names.Insert(12, "Mario");
             names.Insert(0, "Aaron");
-            
+
             Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
 
             //13.
             names.RemoveAt(4);
             Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
 
             //14.
             int marioIndex = names.IndexOf("Mario");
             names.RemoveAt((int)marioIndex);
-            
-            //names.RemoveAt(1);
             Console.WriteLine(String.Join(",", names));
             Console.WriteLine();
 
@@ -228,19 +236,27 @@ namespace listPractice
             int lastOfAaron = names.LastIndexOf("Aaron");
             names.RemoveAt((int)lastOfAaron);
             Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
 
             //17.
-            for (int i = 0; i < names.Count;i++)
+            for (int i = 0; i < names.Count-1; i++)
             {
-                if ()
+                string name = names[i];
+                string nextName = names[i + 1];
+                if (name == nextName)
                 {
-                    
+                    names.RemoveAt(i);
+                    names.RemoveAt(i);
+                    i--;
                 }
-
+                
             }
+            Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
 
             //18.
-            
+            names.Clear();
+            Console.WriteLine($"List: {String.Join(",", names)}");
 
         }
     }
