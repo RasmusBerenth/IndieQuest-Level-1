@@ -200,20 +200,18 @@ namespace listPractice
             Console.WriteLine();
 
             //11.
-            //for (int i = 0; i < names.Count; i+=2)
-            //{
-              //  names.Insert(i, names[i]);
-            //}
-            //Console.WriteLine(String.Join(",", names));
-            //Console.WriteLine();
-
-            //12.
-            for (int i = 1; i < names.Count - 1; i += 2)
+            for (int i = 0; i < names.Count; i += 2)
             {
                 names.Insert(i, names[i]);
             }
-            names.Insert(12, "Mario");
-            names.Insert(0, "Aaron");
+            Console.WriteLine(String.Join(",", names));
+            Console.WriteLine();
+
+            //12.
+            string firstName = names[0];
+            string lastName = names[names.Count - 1];
+            names[0] = lastName;
+            names[names.Count - 1] = firstName;
 
             Console.WriteLine(String.Join(",", names));
             Console.WriteLine();
