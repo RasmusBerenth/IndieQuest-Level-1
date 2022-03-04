@@ -9,6 +9,7 @@ namespace AlgorithmMap
         {
             //1. Prepear the data
             var random = new Random();
+            int direction;
 
             //    1.1 Create code for the river
             int riverStartPositionX = width * 3 / 4;
@@ -16,17 +17,17 @@ namespace AlgorithmMap
 
             for (int y = 1; y < height; y++)
             {
-                int riverDirection = random.Next(3);
+                direction = random.Next(3);
                 int newPositionX;
-                int previousPositionX = riverPositionsX [y - 1];
+                int previousPositionX = riverPositionsX[y - 1];
 
                 //Left
-                if (riverDirection == 0)
+                if (direction == 0)
                 {
                     newPositionX = previousPositionX - 1;
                 }
                 //Right
-                else if (riverDirection == 1)
+                else if (direction == 1)
                 {
                     newPositionX = previousPositionX + 1;
                 }
@@ -35,11 +36,37 @@ namespace AlgorithmMap
                 {
                     newPositionX = previousPositionX;
                 }
-                
+
                 riverPositionsX.Add(newPositionX);
             }
 
             //    1.2 Create code for the road
+            int roadStartPositionY = height / 2;
+            var roadPositionsY = new List<int>() {roadStartPositionY};
+
+            for (int x = 1; x < width; x++)
+            {
+                direction = random.Next(3);
+                int newPositionY;
+                int previousPositionY = roadPositionsY[x - 1];
+                //Up
+                if (direction == 0 && previousPositionY > 2)
+                {
+                    newPositionY = previousPositionY - 1;
+                }
+                //Down
+                else if (direction == 1 && previousPositionY < height - 3)
+                {
+                    newPositionY = previousPositionY + 1;
+                }
+                //Straight
+                else
+                {
+                    newPositionY = previousPositionY;
+                }
+
+                roadPositionsY.Add(newPositionY);
+            }
 
             //    1.3 Create code for the bridge
 
@@ -72,18 +99,24 @@ namespace AlgorithmMap
 
 
                     //    2.2 Draw the road and side path
+                    if (y == roadPositionsY[x])
+                    {
+                        Console.Write("#");
+                        continue;
+                    }
 
                     //    2.3 Draw the bridge
 
+
                     //    2.4 Draw the river
-                    if (x == riverPositionsX[y])
+                    if ((x == riverPositionsX[y]) || (x == riverPositionsX[y] + 1) || x == riverPositionsX[y] + 2)
                     {
                         Console.Write("R");
                         continue;
                     }
 
                     //    2.5 Draw the forest
-                    if (x < width/4)
+                    if (x < width / 4)
                     {
                         int treeRoll = random.Next(100);
                         double treeChance = (Math.Sin((x / (width / 4.0) - 2) * Math.PI / 2) + 1) * 80;
