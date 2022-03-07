@@ -42,7 +42,7 @@ namespace AlgorithmMap
 
             //    1.2 Create code for the road
             int roadStartPositionY = height / 2;
-            var roadPositionsY = new List<int>() {roadStartPositionY};
+            var roadPositionsY = new List<int>() { roadStartPositionY };
 
             for (int x = 1; x < width; x++)
             {
@@ -69,7 +69,52 @@ namespace AlgorithmMap
             }
 
             //    1.3 Create code for the bridge
+            //Find intersection
+            int roadPositionX = 0;
+            int riverPositionX;
+            do
+            {
+                roadPositionX++;
+                int roadPositionY = roadPositionsY[roadPositionX];
+                riverPositionX = riverPositionsX[roadPositionY];
+            }
+            while (roadPositionX < riverPositionX);
+            int intersectionX = roadPositionX;
+            //Calculate bridge parameters
+            int bridgeStartX = intersectionX - 3;
+            int bridgeY = roadPositionsY[bridgeStartX];
+            int bridgeEndX = bridgeStartX + 9;
 
+            //Make road go straight across the bridge
+            for (int bridgeX = bridgeStartX; bridgeX <= bridgeEndX && bridgeX < width; bridgeX++)
+            {
+                roadPositionsY[bridgeX] = bridgeY;
+            }
+
+            //Remake the road after the bridge
+            for (int x = bridgeEndX + 1; x < width; x++)
+            {
+                direction = random.Next(3);
+                int newPositionY;
+                int previousPositionY = roadPositionsY[x - 1];
+                //Up
+                if (direction == 0 && previousPositionY > 2)
+                {
+                    newPositionY = previousPositionY - 1;
+                }
+                //Down
+                else if (direction == 1 && previousPositionY < height - 3)
+                {
+                    newPositionY = previousPositionY + 1;
+                }
+                //Straight
+                else
+                {
+                    newPositionY = previousPositionY;
+                }
+
+                roadPositionsY[x] = newPositionY;
+            }
 
             //2. Draw the map
 
@@ -105,14 +150,42 @@ namespace AlgorithmMap
                         continue;
                     }
 
-                    //    2.3 Draw the bridge
+                    //if (x == riverPositionsX[y] - 5 && y > bridgeStartX)
+                    //{
+                    //    Console.Write("#");
+                    //    continue;
+                    //}
 
+                    //    2.3 Draw the bridge
+                    if (y == bridgeY - 1 && x >= bridgeStartX && x <= bridgeEndX)
+                    {
+                        Console.Write("=");
+                        continue;
+                    }
+
+                    if (y == bridgeY + 1 && x >= bridgeStartX && x <= bridgeEndX)
+                    {
+                        Console.Write("=");
+                        continue;
+                    }
 
                     //    2.4 Draw the river
                     if ((x == riverPositionsX[y]) || (x == riverPositionsX[y] + 1) || x == riverPositionsX[y] + 2)
                     {
-                        Console.Write("R");
+                        if (direction == 2)
+                        {
+                            Console.Write("|");
+                        }
+                        else if (direction == 1)
+                        {
+                            Console.Write("");
+                        }
+                        else
+                        {
+                            Console.Write("/");
+                        }
                         continue;
+
                     }
 
                     //    2.5 Draw the forest
@@ -137,7 +210,7 @@ namespace AlgorithmMap
         }
         static void Main(string[] args)
         {
-            DrawMap(40, 10);
+            DrawMap(60, 20);
         }
     }
 }
