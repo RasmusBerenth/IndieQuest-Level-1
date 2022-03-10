@@ -5,34 +5,28 @@ namespace AlgorithmMap
 {
     internal class Program
     {
-        static void GenerateCrossing()
+        static void StraightenRoad(List<int> roadPositionsY, int startX, int endX)
         {
-            //Find road river intersection
+            for (int x = startX + 1; x <= endX && x < roadPositionsY.Count; x++)
+            {
+                roadPositionsY[x] = roadPositionsY[startX];
+            }
+
+        }
+        static int FindCrossing(List<int> roadPositionsY, List<int> crossingPositionsX)
+        {
+            //Find intersection
             int roadPositionX = 0;
-            int riverPositionX;
+            int crossingPositionX;
             do
             {
                 roadPositionX++;
                 int roadPositionY = roadPositionsY[roadPositionX];
-                riverPositionX = riverPositionsX[roadPositionY];
+                crossingPositionX = crossingPositionsX[roadPositionY];
             }
-            while (roadPositionX < riverPositionX);
-            int intersectionX = roadPositionX;
+            while (roadPositionX < crossingPositionX);
+            return roadPositionX;
 
-            //Calculate bridge parameters
-            int bridgeStartX = intersectionX - 3;
-            int bridgeY = roadPositionsY[bridgeStartX];
-            int bridgeEndX = bridgeStartX + 9;
-
-            //Make road go straight across the bridge
-            for (int bridgeX = bridgeStartX; bridgeX <= bridgeEndX && bridgeX < width; bridgeX++)
-            {
-                roadPositionsY[bridgeX] = bridgeY;
-            }
-
-            //Remake the road after the bridge
-
-            GenerateRoad(bridgeEndX + 1, width, height, roadPositionsY);
         }
         static void GenerateRoad(int roadStartX, int width, int height, List<int> roadPositionsY)
         {
@@ -124,52 +118,52 @@ namespace AlgorithmMap
             var treeSymbols = new string[] { "T", "@", "I" };
             string title = "Adventure Map";
 
-            //    1.1 Create code for the river
+            //    1.1 Create the river
             int riverStartPositionX = width * 3 / 4;
             List<int> riverPositionsX;
             List<int> riverDirections;
 
             GenerateCurve(riverStartPositionX, height, 3, out riverPositionsX, out riverDirections);
 
-            // Create code for the wall
+            // Create the wall
             int wallStartPositionX = width / 4;
             List<int> wallPositionsX;
             List<int> wallDirections;
 
             GenerateCurve(wallStartPositionX, height, 6, out wallPositionsX, out wallDirections);
 
-            //    1.2 Create code for the road
+            //    1.2 Create the road
             int roadStartPositionY = height / 2;
             var roadPositionsY = new List<int>() { roadStartPositionY };
 
             GenerateRoad(1, width, height, roadPositionsY);
 
-            //    1.3 Create code for the bridge
+            //    1.3 Find road wall intersect
+            int wallIntersectionX = FindCrossing(roadPositionsY, wallPositionsX);
+
+            //calculate gate perameters
+            int gateStartX = wallIntersectionX - 3;
+            int gateY = roadPositionsY[gateStartX];
+            int gateEndX = gateStartX + 6;
+
+            //Make the road go straight through the gate
+            StraightenRoad(roadPositionsY, gateStartX, gateEndX);
+
+            //Remake road after the gate
+            GenerateRoad(gateEndX + 1, width, height, roadPositionsY);
+
             //Find road river intersection
-            int roadPositionX = 0;
-            int riverPositionX;
-            do
-            {
-                roadPositionX++;
-                int roadPositionY = roadPositionsY[roadPositionX];
-                riverPositionX = riverPositionsX[roadPositionY];
-            }
-            while (roadPositionX < riverPositionX);
-            int intersectionX = roadPositionX;
+            int riverIntersectionX = FindCrossing(roadPositionsY, riverPositionsX);
 
             //Calculate bridge parameters
-            int bridgeStartX = intersectionX - 3;
+            int bridgeStartX = riverIntersectionX - 3;
             int bridgeY = roadPositionsY[bridgeStartX];
             int bridgeEndX = bridgeStartX + 9;
 
             //Make road go straight across the bridge
-            for (int bridgeX = bridgeStartX; bridgeX <= bridgeEndX && bridgeX < width; bridgeX++)
-            {
-                roadPositionsY[bridgeX] = bridgeY;
-            }
+            StraightenRoad(roadPositionsY, bridgeStartX, bridgeEndX);
 
             //Remake the road after the bridge
-
             GenerateRoad(bridgeEndX + 1, width, height, roadPositionsY);
 
 
@@ -242,16 +236,38 @@ namespace AlgorithmMap
                         continue;
                     }
 
-                    //Drawing Wall
+                    //Drawing towers
                     Console.ForegroundColor = ConsoleColor.Gray;
+                    if (y == gateY + 1 && x == wallIntersectionX && x < gateEndX - 1)
+                    {
+                        Console.Write("[");
+                        continue;
+                    }
+                    
+                    if (y == gateY + 1 && x == wallIntersectionX + 1 && x > gateStartX && x < gateEndX - 1)
+                    {
+                        Console.Write("]");
+                        continue;
+                    }
+
+                    if (y == gateY - 1 && x == wallIntersectionX && x > gateStartX && x < gateEndX - 1)
+                    {
+                        Console.Write("[");
+                        continue;
+                    }
+
+                    if (y == gateY - 1 && x == wallIntersectionX + 1 && x < gateEndX - 1)
+                    {
+                        Console.Write("]");
+                        continue;
+                    }
+
+                    //Drawing Wall
                     if ((x == wallPositionsX[y]) || (x == wallPositionsX[y] + 1))
                     {
                         DrawCurve(wallDirections, y);
                         continue;
                     }
-
-                    //Drawing towers
-
 
                     //    2.5 Draw the forest
                     Console.ForegroundColor = ConsoleColor.Green;
