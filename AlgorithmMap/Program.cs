@@ -11,7 +11,6 @@ namespace AlgorithmMap
             {
                 roadPositionsY[x] = roadPositionsY[startX];
             }
-
         }
         static int FindCrossing(List<int> roadPositionsY, List<int> crossingPositionsX)
         {
@@ -26,7 +25,6 @@ namespace AlgorithmMap
             }
             while (roadPositionX < crossingPositionX);
             return roadPositionX;
-
         }
         static void GenerateRoad(int roadStartX, int width, int height, List<int> roadPositionsY)
         {
@@ -113,67 +111,67 @@ namespace AlgorithmMap
         }
         static void DrawMap(int width, int height)
         {
-            //1. Prepear the data
+            //Prepear the data.
             var random = new Random();
             var treeSymbols = new string[] { "T", "@", "I" };
             string title = "Adventure Map";
 
-            //    1.1 Create the river
+            //Create the river.
             int riverStartPositionX = width * 3 / 4;
             List<int> riverPositionsX;
             List<int> riverDirections;
 
             GenerateCurve(riverStartPositionX, height, 3, out riverPositionsX, out riverDirections);
 
-            // Create the wall
+            //Create the wall.
             int wallStartPositionX = width / 4;
             List<int> wallPositionsX;
             List<int> wallDirections;
 
             GenerateCurve(wallStartPositionX, height, 6, out wallPositionsX, out wallDirections);
 
-            //    1.2 Create the road
+            //Create the road.
             int roadStartPositionY = height / 2;
             var roadPositionsY = new List<int>() { roadStartPositionY };
 
             GenerateRoad(1, width, height, roadPositionsY);
 
-            //    1.3 Find road wall intersect
+            //Find road wall intersect.
             int wallIntersectionX = FindCrossing(roadPositionsY, wallPositionsX);
 
-            //calculate gate perameters
+            //Calculate gate perameters.
             int gateStartX = wallIntersectionX - 3;
             int gateY = roadPositionsY[gateStartX];
             int gateEndX = gateStartX + 6;
 
-            //Make the road go straight through the gate
+            //Make the road go straight through the gate.
             StraightenRoad(roadPositionsY, gateStartX, gateEndX);
 
-            //Remake road after the gate
+            //Remake road after the gate.
             GenerateRoad(gateEndX + 1, width, height, roadPositionsY);
 
-            //Find road river intersection
+            //Find road river intersection.
             int riverIntersectionX = FindCrossing(roadPositionsY, riverPositionsX);
 
-            //Calculate bridge parameters
+            //Calculate bridge parameters.
             int bridgeStartX = riverIntersectionX - 3;
             int bridgeY = roadPositionsY[bridgeStartX];
             int bridgeEndX = bridgeStartX + 9;
 
-            //Make road go straight across the bridge
+            //Make road go straight across the bridge.
             StraightenRoad(roadPositionsY, bridgeStartX, bridgeEndX);
 
-            //Remake the road after the bridge
+            //Remake the road after the bridge.
             GenerateRoad(bridgeEndX + 1, width, height, roadPositionsY);
 
 
-            //2. Draw the map
+            //Draw the map.
             for (int y = 0; y < height; y++)
             {
 
                 for (int x = 0; x < width; x++)
                 {
-                    //    2.1 Draw the frame
+                    //Draw the frame.
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     if ((x == 0 && y == 0) || (x == width - 1 && y == 0) || (x == 0 && y == height - 1) || (x == width - 1 && y == height - 1))
                     {
@@ -193,7 +191,7 @@ namespace AlgorithmMap
                         continue;
                     }
 
-                    //Draw title
+                    //Draw title.
                     if (x == width / 2 - title.Length / 2 && y == 1)
                     {
                         Console.Write(title);
@@ -201,7 +199,7 @@ namespace AlgorithmMap
                         continue;
                     }
 
-                    //    2.2 Draw the road and side path
+                    //Draw the road and side path.
                     Console.ForegroundColor = ConsoleColor.White;
                     if (y == roadPositionsY[x])
                     {
@@ -215,7 +213,7 @@ namespace AlgorithmMap
                         continue;
                     }
 
-                    //    2.3 Draw the bridge
+                    //Draw the bridge.
                     if (y == bridgeY - 1 && x >= bridgeStartX + 1 && x <= bridgeEndX - 1)
                     {
                         Console.Write("=");
@@ -228,7 +226,7 @@ namespace AlgorithmMap
                         continue;
                     }
 
-                    //    2.4 Draw the river
+                    //Draw the river.
                     Console.ForegroundColor = ConsoleColor.Blue;
                     if ((x == riverPositionsX[y]) || (x == riverPositionsX[y] + 1) || (x == riverPositionsX[y] + 2))
                     {
@@ -236,21 +234,21 @@ namespace AlgorithmMap
                         continue;
                     }
 
-                    //Drawing towers
+                    //Draw the towers.
                     Console.ForegroundColor = ConsoleColor.Gray;
-                    if (y == gateY + 1 && x == wallIntersectionX && x < gateEndX - 1)
+                    if (y == gateY + 1 && x == wallIntersectionX && x < gateEndX - 2)
                     {
                         Console.Write("[");
                         continue;
                     }
                     
-                    if (y == gateY + 1 && x == wallIntersectionX + 1 && x > gateStartX && x < gateEndX - 1)
+                    if (y == gateY + 1 && x == wallIntersectionX + 1 && x < gateEndX - 1)
                     {
                         Console.Write("]");
                         continue;
                     }
 
-                    if (y == gateY - 1 && x == wallIntersectionX && x > gateStartX && x < gateEndX - 1)
+                    if (y == gateY - 1 && x == wallIntersectionX && x < gateEndX - 2)
                     {
                         Console.Write("[");
                         continue;
@@ -262,14 +260,14 @@ namespace AlgorithmMap
                         continue;
                     }
 
-                    //Drawing Wall
+                    //Draw the wall.
                     if ((x == wallPositionsX[y]) || (x == wallPositionsX[y] + 1))
                     {
                         DrawCurve(wallDirections, y);
                         continue;
                     }
 
-                    //    2.5 Draw the forest
+                    //    2.5 Draw the forest.
                     Console.ForegroundColor = ConsoleColor.Green;
                     if (x < width / 4)
                     {
@@ -283,7 +281,7 @@ namespace AlgorithmMap
                         }
                     }
 
-                    //Nothing
+                    //Draw nothing.
                     Console.Write(" ");
                 }
 
@@ -293,6 +291,7 @@ namespace AlgorithmMap
         }
         static void Main(string[] args)
         {
+            //Input the size of the map width and height respectivly.
             DrawMap(60, 20);
         }
     }
