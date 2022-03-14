@@ -36,7 +36,7 @@ namespace AlgorithmMap
                 int direction = random.Next(7);
                 int newPositionY;
                 int previousPositionY = roadPositionsY[x - 1];
-                
+
                 //Road goes up and prevents it from going to low.
                 if (direction == 0 && previousPositionY > 2)
                 {
@@ -130,14 +130,14 @@ namespace AlgorithmMap
 
             //Create the river.
             int riverStartPositionX = width * 3 / 4;
-            var riverPositionsX = new List<int>() {riverStartPositionX};
+            var riverPositionsX = new List<int>() { riverStartPositionX };
             var riverDirections = new List<int>();
 
             GenerateCurve(1, height, 3, riverPositionsX, riverDirections);
 
             //Create the wall.
             int wallStartPositionX = width / 4;
-            var wallPositionsX = new List<int>() {wallStartPositionX};
+            var wallPositionsX = new List<int>() { wallStartPositionX };
             var wallDirections = new List<int>();
 
             GenerateCurve(1, height, 6, wallPositionsX, wallDirections);
@@ -150,20 +150,20 @@ namespace AlgorithmMap
 
             //Find road wall intersect.
             int wallIntersectionX = FindCrossing(roadPositionsY, wallPositionsX);
-            
+
             //Calculate gate perameters.
             int gateRoadStartX = wallIntersectionX - 3;
             int gateY = roadPositionsY[gateRoadStartX];
             int gateRoadEndX = gateRoadStartX + 6;
             int gateWallStartY = gateY - 2;
             int gateWallEndY = gateY + 2;
-            
+
             //Straighten the wall.
             StraightenPositions(wallPositionsX, gateWallStartY, gateWallEndY);
-            
+
             //Remake wall after gate
             GenerateCurve(gateWallEndY + 1, height, 6, wallPositionsX, wallDirections);
-            
+
             //Straighten road.
             StraightenPositions(roadPositionsY, gateRoadStartX, gateRoadEndX);
 
@@ -189,13 +189,13 @@ namespace AlgorithmMap
                 for (int x = 0; x < width; x++)
                 {
                     //Drawing the frame.
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     if ((x == 0 && y == 0) || (x == width - 1 && y == 0) || (x == 0 && y == height - 1) || (x == width - 1 && y == height - 1))
                     {
                         Console.Write("+");
                         continue;
                     }
-                    
+
                     if ((x == 0) || (x == width - 1))
                     {
                         Console.Write("|");
@@ -217,7 +217,7 @@ namespace AlgorithmMap
                     }
 
                     //Drawing the main road.
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     if (y == roadPositionsY[x])
                     {
                         Console.Write("#");
@@ -231,7 +231,7 @@ namespace AlgorithmMap
                     }
 
                     //Drawing the bridge.
-                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
                     if (y == bridgeY - 1 && x >= bridgeStartX + 1 && x <= bridgeEndX - 1)
                     {
                         Console.Write("=");
@@ -253,7 +253,7 @@ namespace AlgorithmMap
                     }
 
                     //Drawing the towers.
-                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
                     if (y == gateY + 1 && x == wallPositionsX[y])
                     {
                         Console.Write("[]");
@@ -275,7 +275,7 @@ namespace AlgorithmMap
                         continue;
                     }
 
-                    //2.5 Drawing the forest.
+                    //Drawing the forest.
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     if (x < width / 4)
                     {
@@ -286,6 +286,18 @@ namespace AlgorithmMap
                         {
                             int randomTreeSymbolIndex = random.Next(treeSymbols.Length);
                             Console.Write(treeSymbols[randomTreeSymbolIndex]);
+                            continue;
+                        }
+                    }
+
+                    //Drawing the sheep.
+                    Console.ForegroundColor = ConsoleColor.White;
+                    if (x > width / 4 + 1 && x < width * 3 / 4 - 1 && y > 2)
+                    {
+                        int randomSheepChance = random.Next(100);
+                        if (randomSheepChance > 93)
+                        {
+                            Console.Write("¤");
                             continue;
                         }
                     }
