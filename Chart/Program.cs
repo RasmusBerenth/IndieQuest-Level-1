@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 
 namespace Chart
@@ -9,6 +10,7 @@ namespace Chart
         static void DisplayData(List<double> data)
         {
             Console.CursorVisible = false;
+            Console.SetCursorPosition(0, 0);
 
             for (int y = 20; y >= 0; y--)
             {
@@ -32,10 +34,10 @@ namespace Chart
                     Console.Write(y <= data[x] ? "\u2592" : " ");
                 }
 
-                Console.WriteLine(y);
+                Console.WriteLine();
             }
 
-            return;
+            Thread.Sleep(10);
         }
 
         static void Main(string[] args)
@@ -46,9 +48,9 @@ namespace Chart
             for (int i = 0; i < 70; i++)
             {
                 data.Add(random.Next(20));
+                DisplayData(data);
             }
 
-            DisplayData(data);
         }
     }
 }
