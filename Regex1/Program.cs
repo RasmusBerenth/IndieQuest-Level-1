@@ -18,25 +18,10 @@ namespace Regex1
                 string[] monsterStatLines = monsterStatBlock.Split("\n");
                 string monsterName = monsterStatLines[0];
                 //Solar, Planetar, Roc 100+(del)
-                if (Regex.IsMatch(monsterStatBlock, "fly [1,2,3,4]"))
+                if (Regex.IsMatch(monsterStatBlock, "fly [1234]0 "))
                 {
                     Console.WriteLine(monsterName);
                 }
-
-
-
-
-
-                //string[] monsterHitPoint = monsterStatLines[2].Split("(");
-                //if (monsterHitPoint.Length == 2)
-                //{
-                //    bool manualSearch = Regex.IsMatch(monsterHitPoint[1], "\\d{2}d");
-                //    Console.WriteLine($"{monsterName} - 10+ dice rolls: {manualSearch}");
-                //}
-                //else
-                //{
-                //    Console.WriteLine($"{monsterName} - 10+ dice rolls: False");
-                //}
 
             }
 
