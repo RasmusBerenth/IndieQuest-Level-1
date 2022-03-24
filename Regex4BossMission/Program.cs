@@ -8,6 +8,7 @@ namespace Regex4BossMission
     {
         static void Main(string[] args)
         {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             var httpClient = new HttpClient();
             string[] gameUrls = new string[]
             {
@@ -22,7 +23,7 @@ namespace Regex4BossMission
             {
                 string htmlCode = httpClient.GetStringAsync(url).Result;
                 MatchCollection results = Regex.Matches(htmlCode, @"<div class="".*?subtitle.*?"">([^<]*?)</div>[\n\s\r]*?<div class=""summary column"">[\n\s\r]*?<span.*?class="".*?game_review_summary.*?"".*?>([^<]*?)</span>", RegexOptions.Singleline);
-                Match title = Regex.Match(url, "https://store\\.steampowered\\.com/app/\\d+/(\\S+)/");
+                Match title = Regex.Match(htmlCode, @"<div.*?id=""appHubAppName"".*?>(.*?)</div>");
                 if (title.Success)
                 {
                     Console.WriteLine(title.Groups[1]);
