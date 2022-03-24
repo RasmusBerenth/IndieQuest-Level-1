@@ -22,31 +22,20 @@ namespace Regex4BossMission
             {
                 string htmlCode = httpClient.GetStringAsync(url).Result;
                 MatchCollection results = Regex.Matches(htmlCode, @"<div class="".*?subtitle.*?"">([^<]*?)</div>[\n\s\r]*?<div class=""summary column"">[\n\s\r]*?<span.*?class="".*?game_review_summary.*?"".*?>([^<]*?)</span>", RegexOptions.Singleline);
-                Console.WriteLine(url);
-                foreach (Match result in results)
+                Match title = Regex.Match(url, "https://store\\.steampowered\\.com/app/\\d+/(\\S+)/");
+                if (title.Success)
                 {
-                    if (results.Count == 4)
-                    {
-
-
-                        if (result.Success)
-                        {
-                            Console.WriteLine($"{result.Groups[1]} {result.Groups[2]}");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Could not find review.");
-                        }
-                    }
-                    else if (result.Equals("All"))
-                    {
-
-                    }
-                    else
-                    {
-
-                    }
+                    Console.WriteLine(title.Groups[1]);
                 }
+
+                Match result = results[0];
+                Console.WriteLine($"{result.Groups[1]} {result.Groups[2]}");
+                if (results.Count > 2)
+                {
+                    result = results[1];
+                    Console.WriteLine($"{result.Groups[1]} {result.Groups[2]}");
+                }
+
                 Console.WriteLine();
 
             }
