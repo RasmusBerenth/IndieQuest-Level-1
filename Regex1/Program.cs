@@ -25,7 +25,6 @@ namespace Regex1
 
             }
 
-
         }
     }
 }
