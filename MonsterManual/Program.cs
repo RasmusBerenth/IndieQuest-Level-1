@@ -5,12 +5,18 @@ using System.Text.RegularExpressions;
 
 namespace MonsterManual
 {
+    class ArmorInformation
+    {
+        public int Class;
+        public string Type;
+    }
     class MonsterEntry
     {
         public string Name;
         public string Description;
         public string Alignment;
         public string HitPoint;
+        public ArmorInformation Armor = new ArmorInformation();
     }
     internal class Program
     {
@@ -21,6 +27,8 @@ namespace MonsterManual
             Console.WriteLine(monster.Description);
             Console.WriteLine(monster.Alignment);
             Console.WriteLine(monster.HitPoint);
+            Console.WriteLine(monster.Armor.Class);
+            Console.WriteLine(monster.Armor.Type);
         }
         static void Main(string[] args)
         {
@@ -38,14 +46,17 @@ namespace MonsterManual
                 Match monsterDesciption = Regex.Match(monsterStatLines[1], "(.*),");
                 Match monsterAlignment = Regex.Match(monsterStatLines[1], ", (.*)");
                 Match monsterHitPont = Regex.Match(monsterStatLines[2], "\\d+d\\d+(\\+\\d+)?");
+                Match monsterArmor = Regex.Match(monsterStatLines[3], "Armor Class: (\\d+) (\\((.*)\\))?");
 
+                Convert.ToInt32(monsterArmor); //??? Parse, TryParse
 
                 monster.Name = monsterName;
                 monster.Description = monsterDesciption.Groups[1].Value;
                 monster.Alignment = monsterAlignment.Groups[1].Value;
                 monster.HitPoint = monsterHitPont.Value;
+                monster.Armor.Type = monsterArmor.Groups[3].Value;
+                monster.Armor.Class = monsterArmor.Groups[1].Value;
                 monsterEntries.Add(monster);
-
             }
 
             //Prompt for user input.
