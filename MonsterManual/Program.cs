@@ -57,13 +57,13 @@ namespace MonsterManual
                 string[] monsterStatLines = monsterStatBlock.Split("\n");
                 string monsterName = monsterStatLines[0];
                 Match monsterDesciption = Regex.Match(monsterStatLines[1], "(.*),");
-                Match monsterAlignment = Regex.Match(monsterStatLines[1], ", (.*)");
+                Match monsterAlignment = Regex.Match(monsterStatLines[1], "(, shapechanger\\))?, (.*)");
                 Match monsterHitPont = Regex.Match(monsterStatLines[2], "\\d+d\\d+(\\+\\d+)?");
                 Match monsterArmor = Regex.Match(monsterStatLines[3], "Armor Class: (\\d+) (?:\\((.*)\\))?");
 
                 monster.Name = monsterName;
                 monster.Description = monsterDesciption.Groups[1].Value;
-                monster.Alignment = monsterAlignment.Groups[1].Value;
+                monster.Alignment = monsterAlignment.Groups[2].Value;
                 monster.HitPoint = monsterHitPont.Value;
                 if (monsterArmor.Groups[2].Success)
                 {
@@ -73,7 +73,7 @@ namespace MonsterManual
                     {
                         monster.Armor.Type = ArmorType.Natural;
                     }
-                    else if (Regex.IsMatch(armorTypeText, "^[studded]leather", RegexOptions.IgnoreCase))
+                    else if (Regex.IsMatch(armorTypeText, "leather armor", RegexOptions.IgnoreCase))
                     {
                         monster.Armor.Type = ArmorType.Leather;
                     }
@@ -226,6 +226,7 @@ namespace MonsterManual
             }
             else
             {
+                //If user tries to search by method other than name or armor.
                 Console.WriteLine("This wasen't an option...");
             }
         }

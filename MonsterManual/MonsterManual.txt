@@ -262,7 +262,7 @@ Medium humanoid (any race), any non-lawful alignment
 Hit Points: 65 (10d8+20) 
 Armor Class: 15 (Studded Leather) 
 Speed: 30 ft. 
-Challenge Rating: 2 (450 XP)
+scahallenge Rating: 2 (450 XP)
 
 Barbed Devil
 Medium fiend (devil), lawful evil
