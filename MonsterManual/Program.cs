@@ -18,6 +18,18 @@ namespace MonsterManual
         Plate,
         Other
     }
+    enum ArmorCategory
+    {
+        Light,
+        Medium,
+        Heavy
+    }
+    class ArmorTypeEntry
+    {
+        public string Name;
+        public ArmorCategory Category;
+        public int Weight;
+    }
     class ArmorInformation
     {
         public int Class;
@@ -33,23 +45,39 @@ namespace MonsterManual
     }
     internal class Program
     {
+        static Dictionary<ArmorType, ArmorTypeEntry> ArmorTypeEntries;
         static void DisplayMonster(MonsterEntry monster)
         {
             Console.Clear();
-            Console.WriteLine(monster.Name);
-            Console.WriteLine(monster.Description);
-            Console.WriteLine(monster.Alignment);
-            Console.WriteLine(monster.HitPoint);
-            Console.WriteLine(monster.Armor.Class);
-            Console.WriteLine(monster.Armor.Type);
+            Console.WriteLine($"Name: {monster.Name}");
+            Console.WriteLine($"Description: {monster.Description}");
+            Console.WriteLine($"Alignment: {monster.Alignment}");
+            Console.WriteLine($"Hit Points: {monster.HitPoint}");
+            Console.WriteLine($"Armor Class: {monster.Armor.Class}");
+            if (ArmorTypeEntries.ContainsKey(monster.Armor.Type))
+            {
+                Console.WriteLine($"Armor Type: {ArmorTypeEntries[monster.Armor.Type].Name}");
+                Console.WriteLine($"Armor Catagory: {ArmorTypeEntries[monster.Armor.Type].Category}");
+                Console.WriteLine($"Armor Weigt: { ArmorTypeEntries[monster.Armor.Type].Weight}");
+            }
+            else
+            {
+                Console.WriteLine($"Armor Type: {monster.Armor.Type}");
+            }
+            Console.WriteLine();
         }
         static void Main(string[] args)
         {
             //Creating the list of monsters from the monster manual.
             var monsterEntries = new List<MonsterEntry>();
+
+            //Splitting MonsterManual.txt into smaller pieces.
             string monsterManualPath = "MonsterManual.txt";
             string monsterManualText = File.ReadAllText(monsterManualPath);
             string[] monsterStatBlocks = monsterManualText.Split("\n\n");
+
+
+
             foreach (string monsterStatBlock in monsterStatBlocks)
             {
                 var monster = new MonsterEntry();
@@ -111,8 +139,34 @@ namespace MonsterManual
                     monster.Armor.Type = ArmorType.Unspecified;
                 }
                 monster.Armor.Class = Convert.ToInt32(monsterArmor.Groups[1].Value);
+
                 monsterEntries.Add(monster);
             }
+
+            //Creating a dictionary for the different kinds of armor.
+            ArmorTypeEntries = new Dictionary<ArmorType, ArmorTypeEntry>();
+
+            //Split ArmorTypes.txt into smaller pieces.
+            string armorTypePath = "ArmorTypes.txt";
+            string[] armorTypeLines = File.ReadAllLines(armorTypePath);
+            foreach (string armorTypeLine in armorTypeLines)
+            {
+                string[] armorTypeItems = armorTypeLine.Split(",");
+
+                ArmorType armorType = Enum.Parse<ArmorType>(armorTypeItems[0]);
+                string armorTypeName = armorTypeItems[1];
+                ArmorCategory armorCategory = Enum.Parse<ArmorCategory>(armorTypeItems[2]);
+                int armorWeight = Int32.Parse(armorTypeItems[3]);
+
+                ArmorTypeEntries[armorType] = new ArmorTypeEntry
+                {
+                    Name = armorTypeName,
+                    Category = armorCategory,
+                    Weight = armorWeight
+                };
+            }
+
+
 
             //Prompt for user input and let user chose between name and armor. (n or a)
             Console.WriteLine("MONSTER MANUAL");
@@ -184,6 +238,8 @@ namespace MonsterManual
                 ArmorType selectedArmorType = armorTypes[selectedArmorTypeNumber - 1];
 
                 //Display monsters with selected armor type.
+                counter = 0;
+                Console.WriteLine("Which monster would you like to look up?");
                 foreach (MonsterEntry monsterEntry in monsterEntries)
                 {
                     if (monsterEntry.Armor.Type == selectedArmorType)
@@ -196,32 +252,10 @@ namespace MonsterManual
                 }
 
                 //Select monster.
-                if (counter > 1)
-                {
-                    Console.Clear();
-                    Console.WriteLine("Which monster would you like to look up?");
-                    counter = 0;
-                    foreach (MonsterEntry monsterEntry in matchedMonsters)
-                    {
-                        counter++;
-                        Console.WriteLine($"{counter}. {monsterEntry.Name}");
-                    }
-
-                    int chosenMonsterNumber = Convert.ToInt32(Console.ReadLine());
-                    //Confirm monster.
-                    MonsterEntry chosenMonster = matchedMonsters[chosenMonsterNumber - 1];
-                    DisplayMonster(chosenMonster);
-                }
-                else if (counter == 0)
-                {
-                    //If no monster found in the search ask for new input.
-                    Console.WriteLine("No found monsters, try again");
-                }
-                else
-                {
-                    //If only one monster was found display info.
-                    DisplayMonster(matchedMonsters[0]);
-                }
+                int chosenMonsterNumber = Convert.ToInt32(Console.ReadLine());
+                //Confirm monster.
+                MonsterEntry chosenMonster = matchedMonsters[chosenMonsterNumber - 1];
+                DisplayMonster(chosenMonster);
 
             }
             else
