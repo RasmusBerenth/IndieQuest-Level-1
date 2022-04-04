@@ -76,8 +76,7 @@ namespace MonsterManual
             string monsterManualText = File.ReadAllText(monsterManualPath);
             string[] monsterStatBlocks = monsterManualText.Split("\n\n");
 
-
-
+            //Adding info into the list monsterEntries.
             foreach (string monsterStatBlock in monsterStatBlocks)
             {
                 var monster = new MonsterEntry();
@@ -149,6 +148,7 @@ namespace MonsterManual
             //Split ArmorTypes.txt into smaller pieces.
             string armorTypePath = "ArmorTypes.txt";
             string[] armorTypeLines = File.ReadAllLines(armorTypePath);
+
             foreach (string armorTypeLine in armorTypeLines)
             {
                 string[] armorTypeItems = armorTypeLine.Split(",");
