@@ -19,7 +19,13 @@ namespace StandardDiceNotation
         }
         static int DiceRoll(string diceRoll)
         {
-            Match diceNotation = Regex.Match(diceRoll, "(\\d)d(\\d)([+-]\\d)?");
+            Match diceNotation = Regex.Match(diceRoll, "(\\d*)?d(\\d+)([+-]\\d+)?");
+
+            if (diceNotation.Groups[1].Value == "")
+            {
+
+            }
+
             int numbersOfRolls = Int32.Parse(diceNotation.Groups[1].Value);
             int diceSides = Int32.Parse(diceNotation.Groups[2].Value);
 
@@ -34,34 +40,34 @@ namespace StandardDiceNotation
         }
         static void Main(string[] args)
         {
-            Console.Write("Throwing 1d6+4: ");
+            Console.Write("Throwing d6: ");
             for (int i = 0; i < 10; i++)
             {
-                Console.Write($"{DiceRoll("1d6+4")} ");
+                Console.Write($"{DiceRoll("d6")} ");
             }
 
             Console.WriteLine();
 
-            Console.Write("Throwing 1d8: ");
+            Console.Write("Throwing 2d4: ");
             for (int i = 0; i < 10; i++)
             {
-                Console.Write($"{DiceRoll("1d8")} ");
+                Console.Write($"{DiceRoll("2d4")} ");
             }
 
             Console.WriteLine();
 
-            Console.Write("Throwing 2d6+1: ");
+            Console.Write("Throwing d8+12: ");
             for (int i = 0; i < 10; i++)
             {
-                Console.Write($"{DiceRoll("2d6+1")} ");
+                Console.Write($"{DiceRoll("d8+12")} ");
             }
 
             Console.WriteLine();
 
-            Console.Write("Throwing 2d4+2: ");
+            Console.Write("Throwing 2d4-1: ");
             for (int i = 0; i < 10; i++)
             {
-                Console.Write($"{DiceRoll("2d4+2")} ");
+                Console.Write($"{DiceRoll("2d4-1")} ");
             }
         }
     }
