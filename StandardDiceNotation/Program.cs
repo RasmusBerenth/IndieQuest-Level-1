@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace StandardDiceNotation
@@ -13,10 +14,10 @@ namespace StandardDiceNotation
             try
             {
                 Console.Write($"Throwing {diceRoll}: ");
-                for (int i = 0; i < 10; i++)
-                {
-                    Console.Write($"{DiceRoll(diceRoll)} ");
-                }
+                //for (int i = 0; i < 10; i++)
+                //{
+                Console.Write($"{DiceRoll(diceRoll)} ");
+                //}
             }
             catch (Exception e)
             {
@@ -42,16 +43,18 @@ namespace StandardDiceNotation
         static bool IsStandardDiceNotation(string text)
         {
             return Regex.IsMatch(text, StandardDiceNotationRegex);
-
         }
         static int DiceRoll(int numberOfRolls, int diceSides, int fixedBonus)
         {
             var random = new Random();
+            var rolls = new List<int>();
             int result = 0;
+
             for (int i = 0; i < numberOfRolls; i++)
             {
                 int roll = random.Next(1, diceSides + 1);
                 result += roll;
+                rolls.Add(roll); //Output this list to Main.
             }
             result += fixedBonus;
             return result;
@@ -125,46 +128,32 @@ namespace StandardDiceNotation
 
             }
 
-
-
             return DiceRoll(numbersOfRolls, diceSides, fixedBonus);
         }
         static void Main(string[] args)
         {
-            Throw("2d6");
-            Throw("34");
-            Throw("-12");
-            Throw("ad6");
-            Throw("-3d6");
-            Throw("44d");
-            Throw("0d6");
-            Throw("d+");
-            Throw("2d-4");
-            Throw("2d4.5");
-            Throw("2d$");
-            Throw("2d-6.5");
-            Throw("1d8*2");
-            Throw("1d8+2");
+            Console.WriteLine("DICE SIMULATOR");
+            Console.WriteLine("Enter desired dice roll in standard dice notation:");
+            string userInput;
+
+            do
+            {
+                userInput = Console.ReadLine();
+                if (IsStandardDiceNotation(userInput) == true)
+                {
+                    Console.WriteLine("Simulating...");
+                    Throw(userInput);
+                    break;
+                }
+                else
+                {
+                    Throw(userInput);
+                    Console.WriteLine("You didn't use standard dice notation. Try again!");
+                }
+
+            } while (true);
 
 
-
-
-            //Standard dice notion counter
-            //string textString = "To use the magic potion of Dragon Breath, first roll d8. If you roll 2 or higher, you manage to open the potion. Now roll 5d4+5 to see how many seconds the spell will last. Finally, the damage of the flames will be 2d6 per second.";
-            //string[] words = textString.Split(" ");
-            //int diceRolls = 0;
-
-            //int counter = 0;
-            //foreach (string word in words)
-            //{
-            //    if (IsStandardDiceNotation(word) == true)
-            //    {
-            //        counter++;
-            //        diceRolls += NumberOfRolls(word);
-            //    }
-            //}
-            //Console.WriteLine($"{counter} standard dice notations present.");
-            //Console.WriteLine($"The player will have to preform {diceRolls} rolls.");
         }
     }
 }
