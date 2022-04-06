@@ -5,6 +5,26 @@ namespace StandardDiceNotation
 {
     internal class Program
     {
+        static string StandardDiceNotationRegex = "(?<=\\s|^)(\\d*)d(\\d+)([+-]\\d+)?(?=\\s|$|[.,!?])";
+        static string ExtractionRegex = "^(.*)d(.+?)(([-+\\/*])(.+))?$";
+
+        static void Throw(string diceRoll)
+        {
+            try
+            {
+                Console.Write($"Throwing {diceRoll}: ");
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.Write($"{DiceRoll(diceRoll)} ");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Write($"Can't throw {diceRoll}...{e.Message}");
+            }
+
+            Console.WriteLine();
+        }
         static int NumberOfRolls(string text)
         {
             Match result = Regex.Match(text, "(?<=\\s|^)(\\d*)d(\\d+)([+-]\\d+)?(?=\\s|$|[.,!?])");
@@ -21,14 +41,8 @@ namespace StandardDiceNotation
         }
         static bool IsStandardDiceNotation(string text)
         {
-            if (Regex.IsMatch(text, "(?<=\\s|^)(\\d*)d(\\d+)([+-]\\d+)?(?=\\s|$|[.,!?])"))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return Regex.IsMatch(text, StandardDiceNotationRegex);
+
         }
         static int DiceRoll(int numberOfRolls, int diceSides, int fixedBonus)
         {
@@ -44,56 +58,94 @@ namespace StandardDiceNotation
         }
         static int DiceRoll(string diceRoll)
         {
-            Match diceNotation = Regex.Match(diceRoll, "(?<=\\s|^)(\\d*)d(\\d+)([+-]\\d+)?(?=\\s|$|[.,!?])");
+            Match diceNotation = Regex.Match(diceRoll, ExtractionRegex);
+            if (!diceNotation.Success)
+            {
+                throw new ArgumentException("A standard dice notaion needs at least a d followed by a number of sides.");
+            }
+
             int numbersOfRolls;
+            int diceSides;
+            int fixedBonus = 0;
+
+
             if (diceNotation.Groups[1].Value == "")
             {
                 numbersOfRolls = 1;
             }
             else
             {
-                numbersOfRolls = Int32.Parse(diceNotation.Groups[1].Value);
+                try
+                {
+                    numbersOfRolls = Int32.Parse(diceNotation.Groups[1].Value);
+                }
+                catch
+                {
+                    throw new ArgumentException($"Number of rolls ({diceNotation.Groups[1].Value}) was incorrect");
+                }
+
+                if (numbersOfRolls < 1)
+                {
+                    throw new ArgumentException($"Number of rolls ({diceNotation.Groups[1].Value}) needs to be positive");
+                }
             }
 
-            int diceSides = Int32.Parse(diceNotation.Groups[2].Value);
+            try
+            {
+                diceSides = Int32.Parse(diceNotation.Groups[2].Value);
+            }
+            catch
+            {
+                throw new ArgumentException($"Number of dice sides ({diceNotation.Groups[2].Value}) must be a diget whitout decimals");
+            }
 
-            int fixedBonus = 0;
+            if (diceSides < 1)
+            {
+                throw new ArgumentException($"Number of dice sides ({diceNotation.Groups[2].Value}) must be a positiv didget");
+            }
+
             if (diceNotation.Groups[3].Success)
             {
-                fixedBonus = Int32.Parse(diceNotation.Groups[3].Value);
+                try
+                {
+                    fixedBonus = Int32.Parse(diceNotation.Groups[3].Value);
+                }
+                catch
+                {
+                    string operation = diceNotation.Groups[4].Value;
+                    if (operation == "+" || operation == "-")
+                    {
+                        throw new ArgumentException($"Bonus ({diceNotation.Groups[5].Value} needs an integer)");
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Bonus can only be added or subtracted");
+                    }
+                }
+
             }
+
+
 
             return DiceRoll(numbersOfRolls, diceSides, fixedBonus);
         }
         static void Main(string[] args)
         {
-            if (IsStandardDiceNotation("2d6") == true)
-            {
-                Console.Write("Throwing 2d6: ");
-                for (int i = 0; i < 10; i++)
-                {
-                    Console.Write($"{DiceRoll("2d6")} ");
-                }
-            }
-            else
-            {
-                Console.Write("Can't throw 2d6...");
-            }
+            Throw("2d6");
+            Throw("34");
+            Throw("-12");
+            Throw("ad6");
+            Throw("-3d6");
+            Throw("44d");
+            Throw("0d6");
+            Throw("d+");
+            Throw("2d-4");
+            Throw("2d4.5");
+            Throw("2d$");
+            Throw("2d-6.5");
+            Throw("1d8*2");
+            Throw("1d8+2");
 
-            Console.WriteLine();
-
-            if (IsStandardDiceNotation("34") == true)
-            {
-                Console.Write("Throwing 34: ");
-                for (int i = 0; i < 10; i++)
-                {
-                    Console.Write($"{DiceRoll("34")} ");
-                }
-            }
-            else
-            {
-                Console.Write("Can't throw 34...");
-            }
 
 
 
