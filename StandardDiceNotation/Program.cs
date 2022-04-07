@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace StandardDiceNotation
@@ -8,16 +9,65 @@ namespace StandardDiceNotation
     {
         static string StandardDiceNotationRegex = "(?<=\\s|^)(\\d*)d(\\d+)([+-]\\d+)?(?=\\s|$|[.,!?])";
         static string ExtractionRegex = "^(.*)d(.+?)(([-+\\/*])(.+))?$";
+        static string OrdinalNumber(int number)
+        {
 
+            int lastDigit = number % 10;
+
+            if (number > 10)
+            {
+                int secondToLastDigit = (number / 10) % 10;
+                if (secondToLastDigit == 1)
+                {
+                    return number + "th";
+                }
+            }
+
+            if (lastDigit == 1)
+            {
+                return number + "st";
+            }
+
+            if (lastDigit == 2)
+            {
+                return number + "nd";
+            }
+
+            if (lastDigit == 3)
+            {
+                return number + "rd";
+            }
+            return number + "th";
+
+
+
+        }
         static void Throw(string diceRoll)
         {
+            string diceTypePath = "dice types.txt";
+            string diceTypeText = File.ReadAllText(diceTypePath);
+            string[] diceTypeImages = diceTypeText.Split("\n\n");
+
+
+
+            //Isolate each image
+            //Match if the roll matches with any of the images
+            //if yes show image
+            //if no show text
+
             try
             {
-                Console.Write($"Throwing {diceRoll}: ");
-                //for (int i = 0; i < 10; i++)
-                //{
-                Console.Write($"{DiceRoll(diceRoll)} ");
-                //}
+                List<int> rolls;
+                int totalResult = DiceRoll(diceRoll, out rolls);
+                int number = 1;
+
+                foreach (int roll in rolls)
+                {
+                    string ordinalNumber = OrdinalNumber(number);
+                    Console.WriteLine($"{ordinalNumber} roll is: {roll}");
+                    number++;
+                }
+                Console.WriteLine($"You rolled: {totalResult}");
             }
             catch (Exception e)
             {
@@ -44,22 +94,22 @@ namespace StandardDiceNotation
         {
             return Regex.IsMatch(text, StandardDiceNotationRegex);
         }
-        static int DiceRoll(int numberOfRolls, int diceSides, int fixedBonus)
+        static int DiceRoll(int numberOfRolls, int diceSides, int fixedBonus, out List<int> rolls)
         {
             var random = new Random();
-            var rolls = new List<int>();
+            rolls = new List<int>();
             int result = 0;
 
             for (int i = 0; i < numberOfRolls; i++)
             {
                 int roll = random.Next(1, diceSides + 1);
                 result += roll;
-                rolls.Add(roll); //Output this list to Main.
+                rolls.Add(roll);
             }
             result += fixedBonus;
             return result;
         }
-        static int DiceRoll(string diceRoll)
+        static int DiceRoll(string diceRoll, out List<int> rolls)
         {
             Match diceNotation = Regex.Match(diceRoll, ExtractionRegex);
             if (!diceNotation.Success)
@@ -128,28 +178,45 @@ namespace StandardDiceNotation
 
             }
 
-            return DiceRoll(numbersOfRolls, diceSides, fixedBonus);
+            return DiceRoll(numbersOfRolls, diceSides, fixedBonus, out rolls);
         }
         static void Main(string[] args)
         {
             Console.WriteLine("DICE SIMULATOR");
-            Console.WriteLine("Enter desired dice roll in standard dice notation:");
-            string userInput;
+            string userInput = "";
+            string answer = "n";
 
             do
             {
-                userInput = Console.ReadLine();
-                if (IsStandardDiceNotation(userInput) == true)
+                if (answer == "r")
                 {
                     Console.WriteLine("Simulating...");
                     Throw(userInput);
-                    break;
+                    Console.WriteLine("Do you want to continue? Press (r)epeat, (n)ew roll or (q)uit");
+                }
+                else if (answer == "n")
+                {
+                    Console.WriteLine("Enter desired dice roll in standard dice notation:");
+                    userInput = Console.ReadLine();
+
+                    if (IsStandardDiceNotation(userInput) == true)
+                    {
+                        Console.WriteLine("Simulating...");
+                        Throw(userInput);
+                        Console.WriteLine("Do you want to continue? Press (r)epeat, (n)ew roll or (q)uit");
+                    }
+                    else
+                    {
+                        Throw(userInput);
+                        Console.WriteLine("You didn't use standard dice notation. Try again!");
+                    }
                 }
                 else
                 {
-                    Throw(userInput);
-                    Console.WriteLine("You didn't use standard dice notation. Try again!");
+                    break;
                 }
+
+                answer = Console.ReadLine();
 
             } while (true);
 
