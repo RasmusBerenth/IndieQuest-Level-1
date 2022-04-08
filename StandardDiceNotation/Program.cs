@@ -46,35 +46,81 @@ namespace StandardDiceNotation
         {
             string diceTypePath = "dice types.txt";
             string diceTypeText = File.ReadAllText(diceTypePath);
-            string[] diceTypeImages = diceTypeText.Split("\n\n");
-
-
-
             //Isolate each image
-            //Match if the roll matches with any of the images
-            //if yes show image
-            //if no show text
+            string[] diceTypeImages = diceTypeText.Split("\n\n");
 
             try
             {
                 List<int> rolls;
                 int totalResult = DiceRoll(diceRoll, out rolls);
+
+                //Match if the roll matches with any of the images
+                string selectedDiceTypeImage = null;
+                Match diceSidesMatch = Regex.Match(diceRoll, "d\\d+");
+                string diceSidesText = diceSidesMatch.Value;
+
+                foreach (string image in diceTypeImages)
+                {
+                    if (image.Contains(diceSidesText))
+                    {
+                        selectedDiceTypeImage = image;
+                    }
+                }
+
+                //Display all rolls
                 int number = 1;
 
                 foreach (int roll in rolls)
                 {
-                    string ordinalNumber = OrdinalNumber(number);
-                    Console.WriteLine($"{ordinalNumber} roll is: {roll}");
+                    if (selectedDiceTypeImage == null)
+                    {
+                        string ordinalNumber = OrdinalNumber(number);
+                        Console.WriteLine($"{ordinalNumber} roll is: {roll}");
+                    }
+                    else
+                    {
+                        //Determen console color
+                        Match colorMatch = Regex.Match(selectedDiceTypeImage, "\\s(\\d+)");
+                        int colorNumber = Convert.ToInt32(colorMatch.Groups[1].Value);
+                        ConsoleColor consoleColor = (ConsoleColor)colorNumber;
+                        Console.ForegroundColor = consoleColor;
+
+                        //Determen replaced text
+                        string rollText = roll.ToString();
+                        string questionMarks;
+                        if (Regex.IsMatch(diceSidesText, "\\d\\d") && diceSidesText != "d10")
+                        {
+                            questionMarks = "??";
+                            if (!Regex.IsMatch(rollText, "\\d\\d"))
+                            {
+                                rollText = $" {roll}";
+                            }
+                        }
+                        else
+                        {
+                            questionMarks = "?";
+                            if (roll == 10)
+                            {
+                                rollText = "0";
+                            }
+                        }
+                        string rollImage = selectedDiceTypeImage.Replace(questionMarks, rollText);
+                        int newLineIndex = rollImage.IndexOf('\n');
+                        rollImage = rollImage.Substring(newLineIndex + 1);
+                        Console.WriteLine(rollImage);
+                    }
                     number++;
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
                 Console.WriteLine($"You rolled: {totalResult}");
             }
             catch (Exception e)
             {
                 Console.Write($"Can't throw {diceRoll}...{e.Message}");
-            }
 
+            }
             Console.WriteLine();
+
         }
         static int NumberOfRolls(string text)
         {
@@ -216,7 +262,10 @@ namespace StandardDiceNotation
                     break;
                 }
 
-                answer = Console.ReadLine();
+                if (IsStandardDiceNotation(userInput) == true)
+                {
+                    answer = Console.ReadLine();
+                }
 
             } while (true);
 
